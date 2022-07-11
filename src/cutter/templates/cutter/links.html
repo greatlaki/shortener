@@ -1,0 +1,24 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+{% if request.user.is_authenticated %}
+<li class="last"> {{user.username}} | <a href="{% url 'logout' %}">Выйти</a></li>
+{% else %}
+<li class="last"><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+
+
+
+    {% if list_links_user|length > 0 %}
+        {% for link in list_links_user %}
+
+            <h3 class="author">{{ post.author }}</h3>
+            <p class="long url">{{ post.long_url }}</p>
+            <p class="short url">{{ post.short_url}}</p><br>
+
+        {% endfor %}
+
+    {% else %}
+    <h3 class="title">You haven't got any links yet!</h3>
+
+    {% endif %}
+{% endif %}
