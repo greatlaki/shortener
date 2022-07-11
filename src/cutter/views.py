@@ -1,8 +1,8 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 
 from .forms import *
 from .shortener import *
@@ -29,6 +29,25 @@ def make(request):
     return render(request, 'cutter/cutter.html', {'form': form, 'a': a})
 
 
+class ListLinks(ListView):
+    model = Urls
+    template_name = "cutter/links.html"
+    context_object_name = "list_links_user"
+
+    def get_user_context(self, **kwargs):
+        user = get_object_or_404(
+            User,
+            username=self.kwargs.get('username')
+        )
+
+        links = Urls.objects.filter(author=user)
+
+        context = {
+            'list_links_user': links,
+        }
+        return context
+
+
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
     template_name = 'cutter/register.html'
@@ -37,7 +56,7 @@ class RegisterUser(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('home')
+        return redirect('list of links')
 
 
 class LoginUser(LoginView):
@@ -45,7 +64,7 @@ class LoginUser(LoginView):
     template_name = 'cutter/login.html'
 
     def get_success_url(self):
-        return reverse_lazy('home')
+        return reverse_lazy('list of links')
 
 
 def logout_user(request):
