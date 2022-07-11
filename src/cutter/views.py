@@ -22,4 +22,6 @@ def make(request):
         else:
             form = UrlForm()
             a = 'Invalid URL'
-    return render(request, 'cutter/base.html', {'form': form, 'a': a})
+    return render(request, 'cutter/cutter.html', {'form': form, 'a': a})
+
+
