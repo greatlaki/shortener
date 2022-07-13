@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.models import User
 
 from .models import *
 
@@ -8,7 +7,7 @@ from .models import *
 class UrlForm(forms.ModelForm):
     class Meta:
         model = Urls
-        fields = ['long_url']
+        fields = ['long_url', 'author']
 
 
 class RegisterUserForm(UserCreationForm):

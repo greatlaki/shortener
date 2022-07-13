@@ -1,6 +1,5 @@
-<form method="post"> {% csrf_token %}
+<form method="post" class="post-form">{% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" name="button">Save</button>
+          <button type="submit" class="save btn btn-default">Save</button>
 </form>
-
 <h1>{{ a }}</h1>

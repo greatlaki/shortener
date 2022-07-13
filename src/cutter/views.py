@@ -6,7 +6,7 @@ from django.views.generic import CreateView, ListView
 
 from .forms import *
 from .shortener import *
-from .models import Urls
+from .models import *
 
 
 def home(request, token):
