@@ -1,24 +1,30 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+{% extends 'base.html' %}
 
-{% if request.user.is_authenticated %}
-<li class="last"> {{user.username}} | <a href="{% url 'logout' %}">Выйти</a></li>
-{% else %}
-<li class="last"><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+{% block header %}
+    <h1>{% block title %}Ваши сокращенные URL{% endblock %}</h1>
+{% endblock %}
 
-
-
-    {% if list_links_user|length > 0 %}
-        {% for link in list_links_user %}
-
-            <h3 class="author">{{ post.author }}</h3>
-            <p class="long url">{{ post.long_url }}</p>
-            <p class="short url">{{ post.short_url}}</p><br>
-
-        {% endfor %}
-
+{% block content %}
+    {% if data %}
+        <table>
+            <tr>
+                <th>№</th>
+                <th>Сокращенный url</th>
+                <th>Оригинальный url</th>
+                <th>Дата создания</th>
+            </tr>
+            {% for row in data %}
+                <tr>
+                    <td style="text-align: center">{{ forloop.counter }}</td>
+                    <td>{{ path }}{{ row.reduction_url }}</td>
+                    <td>----{{ row.original_url }}----</td>
+                    <td>{{ row.created }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% else %}
-    <h3 class="title">You haven't got any links yet!</h3>
-
+            <p>Вы еще не сократили ни одного URL...</p>
+            <p><a href="{% url 'index' %}">Сократить URL</a></p>
     {% endif %}
-{% endif %}
+
+{% endblock %}
