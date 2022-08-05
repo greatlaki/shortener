@@ -1,4 +1,5 @@
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -64,14 +65,12 @@ def view_shorturl(request, shortened_part):
         raise Http404("Sorry, this link is broken.")
 
 
-class LoginUser(LoginView):
-    form_class = LoginUserForm
-    template_name = 'cutter/login.html'
+@login_required
+def view_urls(request):
+    """View all the shortened urls of a logged-in user"""
+    author = request.user
+    data = Urls.objects.all().filter(author=author)
+    path = request.build_absolute_uri('/')
+    context = {'data': data, 'path': path}
 
-    def get_success_url(self):
-        return reverse_lazy('list of links')
-
-
-def logout_user(request):
-    logout(request)
-    return redirect('login')
+    return render(request, 'shorturl/view_urls.html', context)
