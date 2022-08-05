@@ -46,7 +46,7 @@ def url_shortener(request):
             context['long_url'] = long_url
             return render(request, template, context)
         else:
-            context['no_user'] = "Пожалуйста зарегистрируйтесь или войдите, чтобы использовать данную функцию "
+            context['no_user'] = "You need be sign in or log in"
         context['errors'] = used_form.errors
 
         return render(request, template, context)
