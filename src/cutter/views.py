@@ -65,17 +65,6 @@ class ListLinks(ListView):
         return context
 
 
-class RegisterUser(CreateView):
-    form_class = RegisterUserForm
-    template_name = 'cutter/register.html'
-    success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('list of links')
-
-
 class LoginUser(LoginView):
     form_class = LoginUserForm
     template_name = 'cutter/login.html'
