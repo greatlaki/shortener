@@ -2,7 +2,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import ListView
 
 from .forms import *
 from .shortener import *
@@ -26,24 +26,30 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
-def home(request, token):
-    long_url = Urls.objects.filter(short_url=token)[0]
-    return redirect(long_url.long_url, )
+def url_shortener(request):
 
+    template = 'shorturl/shorten_url.html'
+    context = {'form': ShorturlForm()}
 
-def make(request):
-    form = UrlForm(request.POST)
-    a = ''
-    if request.method == 'POST':
-        if form.is_valid():
-            new_url = form.save(commit=False)
-            a = Shortener().issue_token()
-            new_url.short_url = a
-            new_url.save()
+    if request.method == 'GET':
+        return render(request, template, context)
+
+    elif request.method == 'POST':
+        used_form = ShorturlForm(request.POST)
+        if used_form.is_valid() and request.user.is_authenticated:
+            shortened_object = used_form.save(commit=False)
+            shortened_object.author = request.user
+            shortened_object.save()
+            new_url = request.build_absolute_uri('/') + shortened_object.short_url
+            long_url = shortened_object.long_url
+            context['new_url'] = new_url
+            context['long_url'] = long_url
+            return render(request, template, context)
         else:
-            form = UrlForm()
-            a = 'Invalid URL'
-    return render(request, 'cutter/cutter.html', {'form': form, 'a': a})
+            context['no_user'] = "Пожалуйста зарегистрируйтесь или войдите, чтобы использовать данную функцию "
+        context['errors'] = used_form.errors
+
+        return render(request, template, context)
 
 
 class ListLinks(ListView):
