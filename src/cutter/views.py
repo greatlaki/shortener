@@ -72,4 +72,4 @@ def view_urls(request):
     path = request.build_absolute_uri('/')
     context = {'data': data, 'path': path}
 
-    return render(request, 'shorturl/view_urls.html', context)
+    return render(request, 'cutter/links.html', context)
