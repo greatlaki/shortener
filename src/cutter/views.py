@@ -1,10 +1,9 @@
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.shortcuts import render, redirect
+
 
 from .forms import *
 from .models import *
@@ -30,13 +29,13 @@ def register(request):
 def url_shortener(request):
 
     template = 'shorturl/shorten_url.html'
-    context = {'form': ShorturlForm()}
+    context = {'form': UrlForm()}
 
     if request.method == 'GET':
         return render(request, template, context)
 
     elif request.method == 'POST':
-        used_form = ShorturlForm(request.POST)
+        used_form = UrlForm(request.POST)
         if used_form.is_valid() and request.user.is_authenticated:
             shortened_object = used_form.save(commit=False)
             shortened_object.author = request.user
