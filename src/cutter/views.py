@@ -28,7 +28,7 @@ def register(request):
 
 def url_shortener(request):
 
-    template = 'shorturl/shorten_url.html'
+    template = 'cutter/cutter.html'
     context = {'form': UrlForm()}
 
     if request.method == 'GET':
