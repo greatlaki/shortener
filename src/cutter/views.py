@@ -1,5 +1,6 @@
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView
@@ -51,23 +52,16 @@ def url_shortener(request):
         return render(request, template, context)
 
 
-class ListLinks(ListView):
-    model = Urls
-    template_name = "cutter/links.html"
-    context_object_name = "list_links_user"
+def view_shorturl(request, shortened_part):
+    """Redirect to the original link from shortened url"""
+    try:
+        shorturl = Urls.objects.get(short_url=shortened_part)
+        shorturl.clicks += 1
+        shorturl.save()
+        return HttpResponseRedirect(shorturl.long_url)
 
-    def get_user_context(self, **kwargs):
-        user = get_object_or_404(
-            User,
-            username=self.kwargs.get('username')
-        )
-
-        links = Urls.objects.filter(author=user)
-
-        context = {
-            'list_links_user': links,
-        }
-        return context
+    except Urls.DoesNotExist:
+        raise Http404("Sorry, this link is broken.")
 
 
 class LoginUser(LoginView):
