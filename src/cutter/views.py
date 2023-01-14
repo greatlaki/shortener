@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from cutter.service import shorten, load_url
+from cutter.service import make_shorten, load_url
 
 
 def index(request):
@@ -14,10 +14,11 @@ def redirect_hash(request, url_hash):
 
 
 def shorten_post(request):
+    print('hello')
     return shorten(request, request.POST['url'])
 
 
 def shorten(request, url):
-    shortened_url_hash = shorten(url)
+    shortened_url_hash = make_shorten(url)
     shortened_url = request.build_absolute_uri(reverse('redirect', args=[shortened_url_hash]))
     return render(request, 'cutter/link.html', {'shortened_url': shortened_url})

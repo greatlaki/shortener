@@ -1,10 +1,10 @@
 from django.urls import path
 
-from . import views
+from cutter.views import index, shorten_post, make_shorten, redirect_hash
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('shorten', views.shorten_post, name='shorten_post'),
-    path('shorten/<str:url>', views.shorten, name='shorten'),
-    path('<str:url_hash>', views.redirect_hash, name='redirect'),
+    path('', index, name='index'),
+    path('shorten', shorten_post, name='shorten_post'),
+    path('shorten/<str:url>', make_shorten, name='shorten'),
+    path('<str:url_hash>', redirect_hash, name='redirect'),
 ]
