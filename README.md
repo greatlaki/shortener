@@ -1,9 +1,35 @@
 # The shortener is a service for shortening long links
 
-# Getting Started
+## Getting Started
 
-# You need to create virtualenv and activate it:
-- virtualenv -p python3.8 venv
-- source venv/bin/activate  
-Install the dependencies:
-- pip install -r requirements.txt
+- If you have pyenv, set a local python 3.11.* version
+
+```
+pyenv local 3.11.*  # set python version which was installed before
+```
+
+- then install dependencies:
+
+```
+poetry install
+```
+
+### Using Docker
+
+- Clone the repo
+
+```
+git@github.com:greatlaki/shortener.git
+```
+
+- Bring up the app
+
+```
+docker-compose up -d --build
+```
+
+- Perform the migration
+
+```
+docker-compose exec web python manage.py migrate
+```
