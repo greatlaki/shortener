@@ -5,7 +5,7 @@ from cutter.service import shorten, load_url
 
 
 def index(request):
-    return render(request, 'main/index.html')
+    return render(request, 'cutter/index.html')
 
 
 def redirect_hash(request, url_hash):
@@ -20,4 +20,4 @@ def shorten_post(request):
 def shorten(request, url):
     shortened_url_hash = shorten(url)
     shortened_url = request.build_absolute_uri(reverse('redirect', args=[shortened_url_hash]))
-    return render(request, 'main/link.html', {'shortened_url': shortened_url})
+    return render(request, 'cutter/link.html', {'shortened_url': shortened_url})
